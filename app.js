@@ -1,7 +1,16 @@
+const CronJob = require('cron').CronJob;
+const configService = require('./service/config-service')
 const forecastService = require('./service/forecast-service');
 
+var job = new CronJob(
+    config.cron,
+    async () => await forecastService.forecast(),
+    null,
+    false,
+    'Europe/Vienna'
+);
+
 (async () => {
-  const today = new Date()
-  const forecast = await forecastService.get(today);
-  console.log(JSON.stringify(forecast, null, 2))
+    console.log('starting cron-job (' + config.cron + ')...')
+    job.start();
 })();
